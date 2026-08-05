@@ -1,13 +1,12 @@
-Metadata-Version: 2.4
+Metadata-Version: 2.1
 Name: Networksecurity
 Version: 0.0.1
+Summary: UNKNOWN
+Home-page: UNKNOWN
 Author: Arpit
 Author-email: arpitgangwani090@gmail.com
-Requires-Dist: python-dotenv
-Requires-Dist: pandas
-Requires-Dist: numpy
-Requires-Dist: pymongo
-Requires-Dist: certifi
-Dynamic: author
-Dynamic: author-email
-Dynamic: requires-dist
+License: UNKNOWN
+Platform: UNKNOWN
+
+UNKNOWN
+
