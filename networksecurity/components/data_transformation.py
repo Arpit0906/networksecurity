@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np 
 from sklearn.impute import KNNImputer
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 
 from networksecurity.constants.training_pipeline import TARGET_COLUMN,DATA_TRANSFORMATION_IMPUTER_PARAMS
 from networksecurity.entity.artifact_entity import DataTransformationArtifact,DataValidationArtifact
@@ -48,7 +49,7 @@ class DataTransformation:
              imputer:KNNImputer=KNNImputer(**DATA_TRANSFORMATION_IMPUTER_PARAMS)
              logging.info(f"Initialised KNN Imputer with {DATA_TRANSFORMATION_IMPUTER_PARAMS}")
 
-             processor:Pipeline= Pipeline([("Imputer",imputer)])
+             processor:Pipeline= Pipeline([("Imputer",imputer),("Scaler",StandardScaler())])
              return processor
 
          except Exception as e:

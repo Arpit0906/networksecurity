@@ -1,6 +1,9 @@
 import os
 import sys
 import mlflow
+import dagshub
+dagshub.init(repo_owner='arpitgangwani090', repo_name='networksecurity', mlflow=True)
+
 
 from networksecurity.exception.exception import Networksecurityexception 
 from networksecurity.logging.logger import logging
@@ -15,8 +18,6 @@ from networksecurity.utils.main_utils.utils import save_object,load_object
 from networksecurity.utils.main_utils.utils import load_numpy_array_data,evaluate_models
 from networksecurity.utils.ml_utils.metric.classification_metric import get_classification_score
 
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import r2_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import (
@@ -43,15 +44,14 @@ class ModelTrainer:
             mlflow.log_metric("precision_score",precision_score)
             mlflow.log_metric("recall_score",recall_score)
 
-            mlflow.sklearn.log_model(best_model,"model")
+            mlflow.sklearn.log_model(sk_model=best_model,name="model")
 
 
     def train_model(self,x_train,y_train,x_test,y_test):
         models = {
-                "Random Forest": RandomForestClassifier(verbose=1),
+                "Random Forest": RandomForestClassifier(),
                 "Decision Tree": DecisionTreeClassifier(),
-                "Gradient Boosting": GradientBoostingClassifier(verbose=1),
-                "Logistic Regression": LogisticRegression(verbose=1),
+                "Gradient Boosting": GradientBoostingClassifier(),
                 "AdaBoost": AdaBoostClassifier(),
             }
         params={
@@ -74,7 +74,6 @@ class ModelTrainer:
                 # 'max_features':['auto','sqrt','log2'],
                 'n_estimators': [8,16,32,64,128,256]
             },
-            "Logistic Regression":{},
             "AdaBoost":{
                 'learning_rate':[.1,.01,.001],
                 'n_estimators': [8,16,32,64,128,256]
@@ -108,6 +107,7 @@ class ModelTrainer:
         os.makedirs(model_dir_path,exist_ok=True)
         Network_Model=NetworkModel(preprocessor=preprocessor,model=best_model)
         save_object(self.model_trainer_config.trained_model_file_path,obj=Network_Model)
+        save_object("final_model/model.pkl",obj=best_model)
 
              ## Model Trainer Artifact
         model_trainer_artifact=ModelTrainerArtifact(trained_model_file_path=self.model_trainer_config.trained_model_file_path,
